@@ -15,13 +15,13 @@ pub struct Response {
 
 #[post("/sample")]
 pub async fn test(req_body: String) -> impl Responder {
-    let r: Req  = serde_json::from_str(&req_body).unwrap();
+    let r: Request  = serde_json::from_str(&req_body).unwrap();
    
     println!("{}", r.function);
     println!("{:?}", r.arguments);
     
     let mut vec:Vec<Response> = Vec::new();
-    vec.push(Response{message: "All ok!"}.to_string());
+    vec.push(Response{message: "All ok!".to_string()});
 
     HttpResponse::Ok().body(serde_json::to_vec(&vec).unwrap())
 }
