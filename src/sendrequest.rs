@@ -1,6 +1,6 @@
 use actix_web::{post, web, App, HttpServer, HttpResponse, Responder};
-// use std::error::Error;
 use std::collections::HashMap;
+use futures;
 use reqwest::{StatusCode};
 use serde::{Deserialize, Serialize};
 
@@ -10,24 +10,57 @@ pub struct Request {
     arguments: Vec<String>,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Response {
     message: String,
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Upper {
+    results: String,
+}
+
+
+
+fn print_type_of<T>(_: &T) {
+    println!("{}", std::any::type_name::<T>())
+}
+
+
+
 async fn callapi(data: Request) {
 
+    // Aqui estou pegando os dados 
     let mut map = HashMap::new();
     map.insert("function", data.function.to_string());
     map.insert("arguments", format!("{:?}", data.arguments));
 
     let client = reqwest::Client::new();
-    let res = client.post("http://127.0.0.1:3000/bia")
+
+    // let res = client.post("http://127.0.0.1:3000/bia")
+    //     .json(&map)
+    //     .send()
+    //     .await
+    //     .expect("failed")
+    //     .json::<String>()
+    //     .await;
+
+        match client.post("http://127.0.0.1:3000/bia")
         .json(&map)
         .send()
-        .await; 
+        .await
+        .expect("failed")
+        .json::<String>()
+        .await {
+            Ok(res) => {
+                println!("aaaaa");
+                println!("{}", res);
+            },
+            Err(e) => {
+                println!("There has been an error");
+            }
+        }
 
-        // println!("{:?}", res)
 }
 
 #[post("/sample")]
@@ -45,8 +78,6 @@ pub async fn sample(req_body: String) -> impl Responder {
 
     HttpResponse::Ok().body(serde_json::to_vec(&vec).unwrap())
 }
-
-
 
 
 #[actix_web::main]
