@@ -5,6 +5,7 @@ pub struct AccountDetails {
     pub client_type: i64,
     pub address: String,
     pub email: String,
+    pub password: String, 
     pub phone: String,
     pub status: i64,
     pub id: i64,
