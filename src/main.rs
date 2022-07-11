@@ -1,6 +1,7 @@
 use actix_web::{post, get, web, Responder, Result, HttpResponse, App, HttpServer};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use reqwest;
 
 
 #[derive(Deserialize)]
@@ -11,14 +12,22 @@ struct Info {
 #[derive(Serialize)]
 struct Test{
     nome: String,
+    bosta: String,
 } 
 
 
 /// extract `Info` using serde
 async fn index(info: web::Json<Info>) -> Result<impl Responder> {
 
+    let result = reqwest::get("https://api.spotify.com/v1/search")
+    .await
+    .unwrap()
+    .text()
+    .await;
+
     let obj = Test{
         nome: info.username.to_string(),
+        bosta: result.to_string(),
     };
     
     Ok(web::Json(obj))
