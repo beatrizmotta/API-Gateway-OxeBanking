@@ -1,12 +1,20 @@
 use actix_web::{post, get, web, Responder, Result, HttpResponse, App, HttpServer};
 use serde::{Deserialize, Serialize};
+use serde_json::json;
 use std::collections::HashMap;
-use reqwest::{self, header::{AUTHORIZATION, CONTENT_TYPE, ACCEPT}};
+use reqwest::{self};
 
 
-#[derive(Deserialize)]
-struct Info {
-    username: String,
+#[derive(Deserialize, Serialize)]
+struct create_transfer {
+    docClienteOrigem: i32,
+    docClienteDestino: i32,
+    nomeClienteOrigem: String,
+    nomeClienteDestino: String,
+    bancoOrigem: String,
+    bancoDestino: String,
+    ValorTransf: i32,
+    DataHora: String,
 }
 
 #[derive(Serialize)]
@@ -14,30 +22,29 @@ struct Test{
     nome: String,
 } 
 
-#[derive(Debug, Serialize, Deserialize)]
-struct Todo{
-    userId: i32,
-    id: Option<i32>,
-    title: String,
-    completed: bool,
-}
-
 
 /// extract `Info` using serde
-async fn index(info: web::Json<Info>) -> Result<impl Responder> {
+async fn createTransfer(info: web::Json<create_transfer>) -> Result<impl Responder> {
 
-    let todos= reqwest::Client::new()
-    .get("https://jsonplaceholder.typicode.com/todos?userId=1")
+    let mut map = HashMap::new();
+
+    map.insert("docClienteOrigem", info.docClienteOrigem.to_string());
+    map.insert("docClienteDestino", info.docClienteDestino.to_string());
+    map.insert("nomeClienteOrigem", info.nomeClienteOrigem.to_string());
+    map.insert("nomeClienteDestino", info.nomeClienteDestino.to_string());
+    map.insert("bancoOrigem", info.bancoOrigem.to_string());
+    map.insert("bancoDestino", info.bancoDestino.to_string());
+    map.insert("ValorTransf", info.ValorTransf.to_string());
+    map.insert("DataHora", info.DataHora.to_string());
+
+    let res = reqwest::Client::new()
+    .post("https://127.0.0.1/api/create_transfer:4000")
+    .json(&map)
     .send()
-    .await
-    .expect("Failed to fetch")
-    .json::<Vec<Todo>>()
     .await;
 
-    println!("{:#?}", todos);
-
     let obj = Test{
-        nome: info.username.to_string(),
+        nome: "OK".to_string(),
     };
     
     Ok(web::Json(obj))
@@ -45,7 +52,7 @@ async fn index(info: web::Json<Info>) -> Result<impl Responder> {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    HttpServer::new(|| App::new().route("/", web::post().to(index)))
+    HttpServer::new(|| App::new().route("/createTransfer", web::post().to(createTransfer)))
         .bind(("127.0.0.1", 8080))?
         .run()
         .await
