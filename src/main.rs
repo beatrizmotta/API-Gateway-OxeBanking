@@ -162,6 +162,7 @@ async fn deleteTransfer(info: web::Json<update_transfer>) -> Result<impl Respond
     Ok(web::Json(obj))
 }
 
+
 async fn updateTransfer(info: web::Json<update_transfer>) -> Result<impl Responder> {
 
     let mut map = HashMap::new();
@@ -216,6 +217,12 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .route("/createTransfer", web::post().to(createTransfer))
             .route("/updateTransfer", web::post().to(updateTransfer))
+            .route("/deleteTransfer", web::post().to(deleteTransfer))
+            .route("/createTransferPix", web::post().to(createTransferPix))
+            .route("/updateTransferPix", web::post().to(updateTransferPix))
+            .route("/createTransferTedDoc", web::post().to(createTransferTedDoc))
+            .route("/updateTransferTedDoc", web::post().to(updateTransferTedDoc))
+            
     })
     .bind(("127.0.0.1", 8080))?
     .run()
