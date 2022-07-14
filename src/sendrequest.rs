@@ -37,15 +37,7 @@ async fn callapi(data: Request) {
 
     let client = reqwest::Client::new();
 
-    // let res = client.post("http://127.0.0.1:3000/bia")
-    //     .json(&map)
-    //     .send()
-    //     .await
-    //     .expect("failed")
-    //     .json::<String>()
-    //     .await;
-
-        match client.post("http://127.0.0.1:3000/bia")
+    match client.post("http://127.0.0.1:3000/bia")
         .json(&map)
         .send()
         .await
