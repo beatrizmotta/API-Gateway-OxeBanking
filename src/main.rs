@@ -1,5 +1,5 @@
 use actix_web::{get, web, App, HttpServer, Responder};
-use std::net::SocketAddr;
+use std::env;
 mod routes;
 
 #[get("/hello/{name}")]
@@ -10,13 +10,8 @@ async fn greet(name: web::Path<String>) -> impl Responder {
 #[actix_web::main] // or #[tokio::main]
 async fn main() -> std::io::Result<()> {
 
-    let port = std::env::var("PORT")
-    .ok()
-    .and_then(|s| s.parse().ok())
-    .unwrap_or(3000);
-
-    let address = SocketAddr::from(([0, 0, 0, 0], port));
-
+    let HOST = env::var("HOST").expect("Host not set");
+    let PORT = env::var("PORT").expect("Port not set");
     
     HttpServer::new(|| {
         App::new()
@@ -24,7 +19,7 @@ async fn main() -> std::io::Result<()> {
             .service(greet)
             .service(routes::getuser)
     })
-    .bind(("127.0.0.1", 8080))?
+    .bind(format!("{}:{}", HOST, PORT))?
     .run()
     .await
 }
