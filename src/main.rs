@@ -1,7 +1,7 @@
 use actix_web::{post, get, web, Responder, Result, HttpResponse, App, HttpServer};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
-use std::collections::HashMap;
+use std::{collections::HashMap, path};
 use reqwest::{self};
 
 
@@ -212,9 +212,12 @@ async fn createTransfer(info: web::Json<create_transfer>) -> Result<impl Respond
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    HttpServer::new(|| App::new().route("/createTransfer", web::post().to(createTransfer)))
-        .bind(("127.0.0.1", 8080))?
-        .run()
-        .await
-    
+    HttpServer::new(|| {
+        App::new()
+            .route("/createTransfer", web::post().to(createTransfer))
+            .route("/updateTransfer", web::post().to(updateTransfer))
+    })
+    .bind(("127.0.0.1", 8080))?
+    .run()
+    .await
 }
