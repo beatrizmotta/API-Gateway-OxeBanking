@@ -1,0 +1,1 @@
+C:\Users\55829\Desktop\APIGATEWAY\API-Gateway-OxeBanking\target\release\Gateway.exe: C:\Users\55829\Desktop\APIGATEWAY\API-Gateway-OxeBanking\src\main.rs C:\Users\55829\Desktop\APIGATEWAY\API-Gateway-OxeBanking\src\routes\structs.rs C:\Users\55829\Desktop\APIGATEWAY\API-Gateway-OxeBanking\src\routes.rs

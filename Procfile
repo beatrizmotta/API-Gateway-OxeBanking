@@ -1,0 +1,1 @@
+web: PORT=$PORT HOST=$HOST ./target/release/Gateway
