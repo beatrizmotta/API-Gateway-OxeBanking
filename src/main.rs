@@ -12,10 +12,7 @@ async fn main() -> std::io::Result<()> {
 
     let HOST = env::var("HOST").expect("Host not set");
     let PORT = env::var("PORT").expect("Port not set");
-    
-    // let host = "0.0.0.0";
-    // let port = "8088";
-    
+
     println!("Project running!");
 
     HttpServer::new(|| {
