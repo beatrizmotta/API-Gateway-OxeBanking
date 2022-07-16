@@ -13,7 +13,7 @@ pub async fn getuser(req_body: String) -> impl Responder {
     let mut vec:Vec<structs::ResponseMessage> = Vec::new();
     
     let client = reqwest::Client::new();
-    match client.get("http://127.0.0.1:3000/users")
+    match client.get("https://oxebanking-accounting.herokuapp.com/users")
     .send()
     .await
     .expect("Failed to fetch")
