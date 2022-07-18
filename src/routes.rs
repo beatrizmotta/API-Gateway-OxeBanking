@@ -1,5 +1,6 @@
-use actix_web::{post, get, web, App, HttpServer, HttpResponse, Responder};
+use actix_web::{post, get, web, App, HttpServer, HttpResponse, Responder, Result};
 use std::{collections::HashMap, path};
+use serde_json::json;
 mod structs;
 
 // Login Route
